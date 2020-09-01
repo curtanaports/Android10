@@ -1,0 +1,3 @@
+service checknv /system/bin/checknv
+    user system
+    class late_start

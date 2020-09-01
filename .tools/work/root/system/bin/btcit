@@ -1,0 +1,11 @@
+# Script to start "input" on the device, which has a very rudimentary
+# shell.
+#
+am startservice -a com.xiaomi.bttester.MainService
+
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
+base=/system
+export CLASSPATH=$base/framework/bluetoothcit.jar
+exec app_process $base/bin com.xiaomi.commands.bluetooth.Bluetooth $*
+

@@ -3,70 +3,6 @@ PD="$PWD"
 
 DATE=$(TZ=Asia/Kolkata date +"%d%m")
 
-token= # telegram bot token
-chatid= # telegram chat id
-
-ROM="$1"
-##---------------------------------------------------------##
-
-function exports {
-	export BOT_MSG_URL="https://api.telegram.org/bot$token/sendMessage"
-	export BOT_BUILD_URL="https://api.telegram.org/bot$token/sendDocument"
-	export BOT_STICKER_URL="https://api.telegram.org/bot$token/sendSticker"
-}
-exports
-
-##---------------------------------------------------------##
-
-function tg_post_msg {
-	curl -s -X POST "$BOT_MSG_URL" -d chat_id="$2" \
-	-d "disable_web_page_preview=true" \
-	-d "parse_mode=html" \
-	-d text="$1"
-}
-
-##---------------------------------------------------------##
-
-function tg_post_sticker {
-if [ "$STICKER" = 1 ]
-then
-	curl -v -F chat_id="$2" "$BOT_STICKER_URL" \
-	-F "disable_notification=true" \
-	-F sticker=@/$TELEGRAM_DIR/stickers/$1.tgs
-fi
-}
-
-##---------------------------------------------------------##
-
-function tg_post_build {
-	#Post MD5Checksum alongwith for easeness
-	MD5CHECK=$(md5sum "$1" | cut -d' ' -f1)
-
-	#Show the Checksum alongwith caption
-	curl --progress-bar -F document=@"$1" "$BOT_BUILD_URL" \
-	-F chat_id="$2"  \
-	-F "disable_web_page_preview=true" \
-	-F "parse_mode=html" \
-	-F caption="$3
-
-<b>MD5 Checksum : </b><code>$MD5CHECK</code>"  
-}
-
-##---------------------------------------------------------##
-
-function tg_fpush {
-	#Post MD5Checksum alongwith for easeness
-	#MD5CHECK=$(md5sum "$2" | cut -d' ' -f1)
-
-	#Show the Checksum alongwith caption
-	bash t -H -D -t $token -c $1 -f $2
-	#"$3"$'\n'$'\n'"<b>MD5 Checksum : </b><code>$MD5CHECK</code>"
-}
-
-
-tg_post_msg "<b>Started a Port build - $ROM</b>"$'\n'"<code>Extarcting Rom zip...</code>" "$chatid"
-BUILD_START=$(date +"%s")
-
 sudo mkdir "$PD"/out
 sudo mkdir "$PD"/out/"$ROM"
 sudo mkdir "$PD"/in
@@ -78,10 +14,8 @@ mv *.zip "$PD"/in/"$ROM"/
 unzip -n -q -d "$PD"/out/"$ROM" "$PD"/in/"$ROM"/*.zip -x firmware-update/abl.elf firmware-update/BTFM.bin firmware-update/cmnlib64.mbn firmware-update/cmnlib.mbn firmware-update/devcfg.mbn firmware-update/dspso.bin firmware-update/hyp.mbn firmware-update/keymaster.mbn firmware-update/mdtp.img firmware-update/mdtpsecapp.mbn firmware-update/NON-HLOS.bin firmware-update/pmic.elf firmware-update/rpm.mbn firmware-update/splash.img firmware-update/tz.mbn firmware-update/xbl.elf boot.img dtbo.img vendor.* cust.*
 rm -rf "$PD"/out/$ROM/firmware-update
 
-tg_post_msg "<b>Done</b>"$'\n'"<code>Making Images from Port rom...</code>" "$chatid"
-
 brotli -j -v -d "$PD"/out/$ROM/system.new.dat.br "$PD"/out/$ROM/system.new.dat
-.tools/d2is "$PD"/out/$ROM/system.transfer.list "$PD"/out/$ROM/system.new.dat "$PD"/work/"$ROM"/s-"$DATE".img
+.tools/sdat2img/sdat2img.py "$PD"/out/$ROM/system.transfer.list "$PD"/out/$ROM/system.new.dat "$PD"/work/"$ROM"/s-"$DATE".img
 
 rm -rf "$PD"/out/$ROM/*
 
@@ -92,17 +26,15 @@ sudo mount -o loop "$PD"/work/"$ROM"/s-"$DATE".img "$PD"/work/"$ROM"/s
 
 sudo rm "$PD"/work/"$ROM"/s/system/etc/device_features/*xml
 
-tg_post_msg "<b>Done</b>"$'\n'"<code>Adapting to Dynamic layout...</code>" "$chatid"
 # product
-cp "$PD"/.tools/p.img "$PD"/work/"$ROM"/p-"$DATE".img
+unzip -X "$PD"/.tools/p.zip -d "$PD"/work/"$ROM"/
+mv "$PD"/work/"$ROM"/p.img "$PD"/work/"$ROM"/p-"$DATE".img
 rm -rf "$PD"/work/"$ROM"/p && mkdir "$PD"/work/"$ROM"/p
 
 # increase product image size
 dd if=/dev/zero bs=1M count=1000 >> "$PD"/work/"$ROM"/p-"$DATE".img
 e2fsck -f -y "$PD"/work/"$ROM"/p-"$DATE".img
 resize2fs "$PD"/work/"$ROM"/p-"$DATE".img
-
-tg_post_msg "<b>Making changes for Curtana...</b>"  "$chatid"
 
 # start masking changes
 sudo mount -o loop "$PD"/work/"$ROM"/p-"$DATE".img "$PD"/work/"$ROM"/p
@@ -112,7 +44,7 @@ sudo cp -a -v "$PD"/work/"$ROM"/s/system/product/. "$PD"/work/"$ROM"/p/
 sudo rm -rf "$PD"/work/"$ROM"/s/system/product
 sudo rm -rf "$PD"/work/"$ROM"/s/product
 
-sudo cp -r -v "$PD"/.tools/work/g/root/. "$PD"/work/"$ROM"/s/
+sudo cp -r -v "$PD"/.tools/work/root/. "$PD"/work/"$ROM"/s/
 
 sudo cp -a -v "$PD"/work/"$ROM"/s/vendor "$PD"/work/"$ROM"/s/product
 
@@ -128,6 +60,9 @@ sudo chmod 0755 system
 
 cd system
 sudo rm -rf data-app
+
+sudo chmod -R 0644 app/Health/lib/arm*
+sudo chmod 0755 app/Health/lib/arm*
 
 cd bin
 sudo chmod 0755 audio_set_params btcit elliptic_recording_tool ext_logger fatal_error fsck.ntfs ghr mem_parser mifunctiontest mishow.sh mkfs.ntfs mount.ntfs odm_vib_cal procmem qmesa_parser qmesa.sh qvrdatalogger qvrservice qvrservicetest qvrservicetest64 rtspclient rtspserver strace tcpdump tcpdump_v2 tinyhostless vibrator_test hwservicemanager
@@ -183,30 +118,57 @@ sudo chmod 0755 priv-app
 
 cd "$PD"
 
-# battery
-sudo cp -v "$PD"/work/"$ROM"/s/system/framework/framework-res.apk "$PD"/.tools/work/g/apk/in/
-sudo unzip -X "$PD"/.tools/work/g/apk/in/framework-res.apk -d "$PD"/.tools/work/g/apk/work/framework-res
-sudo cp -v -p "$PD"/.tools/work/g/apk/power_profile.xml "$PD"/.tools/work/g/apk/work/framework-res/res/xml
-cd "$PD"/.tools/work/g/apk/work/framework-res
+# battery ===========================================================
+sudo cp -v "$PD"/work/"$ROM"/s/system/framework/framework-res.apk "$PD"/.tools/work/apk/in/
+sudo unzip -X "$PD"/.tools/work/apk/in/framework-res.apk -d "$PD"/.tools/work/apk/work/framework-res
+sudo cp -v -p "$PD"/.tools/work/apk/power_profile.xml "$PD"/.tools/work/apk/work/framework-res/res/xml
+cd "$PD"/.tools/work/apk/work/framework-res
 sudo zip -r0 framework-res.apk *
 cd "$PD"
-sudo cp -v "$PD"/.tools/work/g/apk/work/framework-res/framework-res.apk "$PD"/work/"$ROM"/s/system/framework/framework-res.apk
+sudo cp -v "$PD"/.tools/work/apk/work/framework-res/framework-res.apk "$PD"/work/"$ROM"/s/system/framework/framework-res.apk
 sudo chmod 0644 "$PD"/work/"$ROM"/s/system/framework/framework-res.apk
-sudo rm -rf "$PD"/.tools/work/g/apk/work/framework-res
+sudo rm -rf "$PD"/.tools/work/apk/work/framework-res
 
-# product
-sudo cp -a -v "$PD"/.tools/work/g/product/. "$PD"/work/"$ROM"/p/
-sudo chmod -R 0644 "$PD"/work/"$ROM"/p/lib*
-sudo chmod 0755 "$PD"/work/"$ROM"/p/lib*
+# haptic ===========================================================
+
+
+# product ===========================================================
+
+sudo cp -r -v "$PD"/.tools/work/product/app/NetworkStackOverlay "$PD"/work/"$ROM"/p/app/
+sudo cp -v "$PD"/.tools/work/product/etc/permissions/privapp-permissions-google.xml "$PD"/work/"$ROM"/p/etc/permissions/
+sudo cp -r -v "$PD"/.tools/work/product/priv-app/. "$PD"/work/"$ROM"/p/priv-app/
+sudo cp -v "$PD"/.tools/work/product/build.prop "$PD"/work/"$ROM"/p/
+sudo cp -r -v "$PD"/.tools/work/product/lib* "$PD"/work/"$ROM"/p/
+
+cd "$PD"/work/"$ROM"/p/
+sudo chmod 0644 app/NetworkStackOverlay/NetworkStackOverlay.apk
+sudo chmod 0755 app/NetworkStackOverlay
+sudo chmod 0755 app
+sudo chown -R root:root app
+
+sudo chmod -R 0644 priv-app/Hotword*
+sudo chmod 0755 priv-app/Hotword*
+sudo chmod 0755 priv-app
+sudo chown -R root:root priv-app
+
+sudo chmod 0644 etc/permissions/privapp-permissions-google.xml
+sudo chmod 0755 etc/permissions
+sudo chown -R root:root etc/permissions
+sudo chmod 0755 etc
+sudo chown root:root etc
+
+
+sudo chmod -R 0644 lib*
+sudo chmod 0755 lib*
 
 # props
-"$PD"/.tools/work/g/sed/SsedB "$ROM"
-"$PD"/.tools/work/g/sed/ctscust "$ROM"
+"$PD"/.tools/work/sed/SsedB "$ROM"
+"$PD"/.tools/work/sed/ctscust "$ROM"
 
-"$PD"/.tools/work/g/sed/SsedP "$ROM"
+"$PD"/.tools/work/sed/SsedP "$ROM"
 
-"$PD"/.tools/work/g/sed/PsedB "$ROM"
-"$PD"/.tools/work/g/sed/ctscustp "$ROM"
+"$PD"/.tools/work/sed/PsedB "$ROM"
+"$PD"/.tools/work/sed/ctscustp "$ROM"
 
 cd "$PD"/work/"$ROM"/
 sudo umount s p

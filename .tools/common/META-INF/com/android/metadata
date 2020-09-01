@@ -1,0 +1,9 @@
+ota-property-files=metadata:69:285         
+ota-required-cache=0
+ota-type=BLOCK
+post-build=xiaomi/ginkgo/ginkgo:10/QKQ1.200114.002/20.8.6:user/release-keys
+post-build-incremental=20.8.6
+post-sdk-level=29
+post-security-patch-level=2020-08-01
+post-timestamp=1596644560
+pre-device=ginkgo

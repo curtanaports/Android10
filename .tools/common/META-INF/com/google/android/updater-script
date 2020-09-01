@@ -1,0 +1,43 @@
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
+
+ui_print("Miui Port Rom");
+ui_print("MIUI 12.x");
+ui_print(" ");
+ui_print("Ported to curtana by Sudeep Duhoon");
+ui_print(" ");
+
+getprop("ro.product.device") == "curtana" || abort("E3004: This package is for \"curtana\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+ui_print("Target: Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.10.0.QJWMIXM:user/release-keys");
+show_progress(0.200000, 10);
+
+assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));
+
+ui_print("Flashing product partition...");
+block_image_update(map_partition("product"), package_extract_file("product.transfer.list"), "product.new.dat.br", "product.patch.dat") ||
+  abort("E2001: Failed to update product image.");
+
+ui_print("Flashing system partition...");
+block_image_update(map_partition("system"), package_extract_file("system.transfer.list"), "system.new.dat.br", "system.patch.dat") ||
+  abort("E1001: Failed to update system image.");
+
+show_progress(0.100000, 2);
+
+set_progress(1.000000);
+
+package_extract_file("META-INF/com/xiaomieu/busybox", "/tmp/busybox");
+run_program("/sbin/chmod", "777", "/tmp/busybox");
+
+run_program("/tmp/busybox", "chmod", "660", "/data/data/com.google.android.gms/databases/dg.db");
+run_program("/tmp/busybox", "rm", "-rf", "/data/data/com.google.android.gms/app_dg_cache");
+run_program("/tmp/busybox", "rm", "-f", "/data/data/com.google.android.gms/databases/dg.db");
+package_extract_file("META-INF/com/xiaomieu/dg.db", "/data/data/com.google.android.gms/databases/dg.db");
+run_program("/tmp/busybox", "chmod", "444", "/data/data/com.google.android.gms/databases/dg.db");
+
+package_extract_file("META-INF/com/xiaomieu/xiaomieu.sh", "/tmp/xiaomieu.sh");
+run_program("/sbin/sh", "/tmp/xiaomieu.sh");
+ui_print("Done! Flash vendor now.");

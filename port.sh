@@ -215,6 +215,7 @@ sudo chown root:root etc
 sudo chmod -R 0644 lib*
 sudo chmod 0755 lib*
 
+cd "$PD"
 # props
 "$PD"/.tools/work/sed/SsedB "$ROM"
 "$PD"/.tools/work/sed/ctscust "$ROM"

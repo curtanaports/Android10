@@ -225,9 +225,7 @@ cd "$PD"
 "$PD"/.tools/work/sed/PsedB "$ROM"
 "$PD"/.tools/work/sed/ctscustp "$ROM"
 
-cd "$PD"/work/"$ROM"/
-sudo umount s p
-rm -rf s p
-cd "$PD"
+sudo umount "$PD"/work/"$ROM"/s "$PD"/work/"$ROM"/p
+rm -rf "$PD"/work/"$ROM"/s "$PD"/work/"$ROM"/p
 
 sudo ./zip "$ROM"

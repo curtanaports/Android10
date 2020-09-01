@@ -1,0 +1,41 @@
+ROM=$1
+PD=$PWD
+PROPD=""$PD"/work/"$ROM"/s/system/etc/prop.default"
+sudo sed -i 's|ro.miui.has_cust_partition=.*|ro.miui.has_cust_partition=true|g' $PROPD
+sudo sed -i 's|ro.appsflyer.preinstall.path=.*|ro.appsflyer.preinstall.path=/data/miui/pai/pre_install.appsflyer|g' $PROPD
+sudo sed -i 's|ro.miui.pai.preinstall.path=.*|ro.miui.pai.preinstall.path=/data/miui/pai/|g' $PROPD
+sudo sed -i 's|ro.secureboot.devicelock=.*|ro.secureboot.devicelock=1|g' $PROPD
+sudo sed -i 's|ro.booking.channel.path=.*|ro.booking.channel.path=/cust/etc/.booking.data.aid|g' $PROPD
+sudo sed -i 's|ro.wps.prop.channel.path=.*|ro.wps.prop.channel.path=/cust/etc/wps.prop|g' $PROPD
+sudo sed -i 's|ro.trackingId.com.lzd.appid=.*|ro.trackingId.com.lzd.appid=/cust/etc/lazadaconfiginfo|g' $PROPD
+sudo sed -i 's|ro.actionable_compatible_property.enabled=.*|ro.actionable_compatible_property.enabled=true|g' $PROPD
+sudo sed -i 's|ro.postinstall.fstab.prefix=.*|ro.postinstall.fstab.prefix=/system|g' $PROPD
+sudo sed -i 's|ro.secure=.*|ro.secure=1|g' $PROPD
+sudo sed -i 's|security.perf_harden=.*|security.perf_harden=1|g' $PROPD
+sudo sed -i 's|ro.adb.secure=.*|ro.adb.secure=1|g' $PROPD
+sudo sed -i 's|ro.allow.mock.location=.*|ro.allow.mock.location=0|g' $PROPD
+sudo sed -i 's|ro.debuggable=.*|ro.debuggable=0|g' $PROPD
+sudo sed -i 's|ro.com.google.acsa=.*|ro.com.google.acsa=true|g' $PROPD
+sudo sed -i 's|debug.atrace.tags.enableflags=.*|debug.atrace.tags.enableflags=0|g' $PROPD
+sudo sed -i 's|dalvik.vm.image-dex2oat-Xms=.*|dalvik.vm.image-dex2oat-Xms=64m|g' $PROPD
+sudo sed -i 's|dalvik.vm.image-dex2oat-Xmx=.*|dalvik.vm.image-dex2oat-Xmx=64m|g' $PROPD
+sudo sed -i 's|dalvik.vm.dex2oat-Xms=.*|dalvik.vm.dex2oat-Xms=64m|g' $PROPD
+sudo sed -i 's|dalvik.vm.dex2oat-Xmx=.*|dalvik.vm.dex2oat-Xmx=512m|g' $PROPD
+sudo sed -i 's|dalvik.vm.usejit=.*|dalvik.vm.usejit=true|g' $PROPD
+sudo sed -i 's|dalvik.vm.usejitprofiles=.*|dalvik.vm.usejitprofiles=true|g' $PROPD
+sudo sed -i 's|dalvik.vm.dexopt.secondary=.*|dalvik.vm.dexopt.secondary=true|g' $PROPD
+sudo sed -i 's|dalvik.vm.appimageformat=.*|dalvik.vm.appimageformat=lz4|g' $PROPD
+sudo sed -i 's|ro.dalvik.vm.native.bridge=.*|ro.dalvik.vm.native.bridge=0|g' $PROPD
+sudo sed -i 's|pm.dexopt.first-boot=.*|pm.dexopt.first-boot=quicken|g' $PROPD
+sudo sed -i 's|pm.dexopt.boot=.*|pm.dexopt.boot=verify|g' $PROPD
+sudo sed -i 's|pm.dexopt.install=.*|pm.dexopt.install=speed-profile|g' $PROPD
+sudo sed -i 's|pm.dexopt.bg-dexopt=.*|pm.dexopt.bg-dexopt=speed-profile|g' $PROPD
+sudo sed -i 's|pm.dexopt.ab-ota=.*|pm.dexopt.ab-ota=speed-profile|g' $PROPD
+sudo sed -i 's|pm.dexopt.inactive=.*|pm.dexopt.inactive=verify|g' $PROPD
+sudo sed -i 's|pm.dexopt.shared=.*|pm.dexopt.shared=speed|g' $PROPD
+sudo sed -i 's|dalvik.vm.dex2oat-resolve-startup-strings=.*|dalvik.vm.dex2oat-resolve-startup-strings=true|g' $PROPD
+sudo sed -i 's|dalvik.vm.dex2oat-max-image-block-size=.*|dalvik.vm.dex2oat-max-image-block-size=524288|g' $PROPD
+sudo sed -i 's|dalvik.vm.minidebuginfo=.*|dalvik.vm.minidebuginfo=true|g' $PROPD
+sudo sed -i 's|dalvik.vm.dex2oat-minidebuginfo=.*|dalvik.vm.dex2oat-minidebuginfo=true|g' $PROPD
+sudo sed -i 's|ro.iorapd.enable=.*|ro.iorapd.enable=false|g' $PROPD
+sudo sed -i 's|persist.sys.usb.config=.*|persist.sys.usb.config=none|g' $PROPD

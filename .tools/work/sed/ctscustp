@@ -1,0 +1,32 @@
+# cts
+ROM=$1
+PD=$PWD
+CTS=""$PD"/work/"$ROM"/p/build.prop"
+sudo sed -i 's|ro.odm.build.fingerprint=.*|ro.odm.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.build.fingerprint=.*|ro.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.system.build.fingerprint=.*|ro.system.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.vendor.build.fingerprint=.*|ro.vendor.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.bootimage.build.fingerprint=.*|ro.bootimage.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.product.build.fingerprint=.*|ro.product.build.fingerprint=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.7.0.QJWMIXM:user/release-keys|g' $CTS
+sudo sed -i 's|ro.secure=.*|ro.secure=1|g' $CTS
+sudo sed -i 's|ro.debuggable=.*|ro.debuggable=0|g' $CTS
+sudo sed -i 's|ro.adb.secure=.*|ro.adb.secure=1|g' $CTS
+sudo sed -i 's|net.hostname=.*|net.hostname=RedmiNote9Pro|g' $CTS
+sudo sed -i 's|ro.product.model=.*|ro.product.model=Redmi Note 9 Pro|g' $CTS
+sudo sed -i 's|ro.product.odm.model=.*|ro.product.odm.model=Redmi Note 9 Pro|g' $CTS
+sudo sed -i 's|ro.product.product.model=.*|ro.product.product.model=qssi system image for arm64|g' $CTS
+sudo sed -i 's|ro.product.system.model=.*|ro.product.system.model=qssi system image for arm64|g' $CTS
+sudo sed -i 's|ro.product.vendor.model=.*|ro.product.vendor.model=Redmi Note 9 Pro|g' $CTS
+sudo sed -i 's|ro.build.version.security_patch=.*|ro.build.version.security_patch=2020-04-01|g' $CTS
+
+# cust
+sudo sed -i 's|ro.product.locale.language=.*|ro.product.locale.language=en|g' $CTS
+sudo sed -i 's|ro.product.locale.region=.*|ro.product.locale.region=US|g' $CTS
+sudo sed -i 's|ro.miui.region=.*|ro.miui.region=IN|g' $CTS
+sudo sed -i 's|ro.miui.mcc=.*|ro.miui.mcc=9404|g' $CTS
+sudo sed -i 's|ro.miui.mnc=.*|ro.miui.mnc=9999|g' $CTS
+sudo sed -i 's|ro.miui.cust_variant=.*|ro.miui.cust_variant=in|g' $CTS
+sudo sed -i 's|ro.vendor.miui.region=.*|ro.vendor.miui.region=IN|g' $CTS
+sudo sed -i 's|ro.vendor.miui.mcc=.*|ro.vendor.miui.mcc=9404|g' $CTS
+sudo sed -i 's|ro.vendor.miui.mnc=.*|ro.vendor.miui.mnc=9999|g' $CTS
+sudo sed -i 's|ro.vendor.miui.cust_variant=.*|ro.vendor.miui.cust_variant=in|g' $CTS

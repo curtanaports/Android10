@@ -1,5 +1,7 @@
 /.tools/img2sdat
 /.tools/sdat2img
+.tools/work/apk/in
+.tools/work/apk/work
 /in
 /work
 /out

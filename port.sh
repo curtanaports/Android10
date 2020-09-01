@@ -26,7 +26,7 @@ rm -rf "$PD"/out/$ROM/*
 rm -rf "$PD"/work/"$ROM"/s && mkdir "$PD"/work/"$ROM"/s
 sudo mount -o loop "$PD"/work/"$ROM"/s-"$DATE".img "$PD"/work/"$ROM"/s
 
-sudo rm "$PD"/work/"$ROM"/s/system/etc/device_features/*xml
+sudo rm -rf "$PD"/work/"$ROM"/s/system/etc/device_features/
 
 # product
 unzip -X "$PD"/.tools/p.zip -d "$PD"/work/"$ROM"/
@@ -121,6 +121,8 @@ sudo chmod 0755 priv-app
 cd "$PD"
 
 # battery ===========================================================
+mkdir "$PD"/.tools/work/apk/in/
+mkdir "$PD"/.tools/work/apk/work/
 sudo cp -v "$PD"/work/"$ROM"/s/system/framework/framework-res.apk "$PD"/.tools/work/apk/in/
 sudo unzip -X "$PD"/.tools/work/apk/in/framework-res.apk -d "$PD"/.tools/work/apk/work/framework-res
 sudo cp -v -p "$PD"/.tools/work/apk/power_profile.xml "$PD"/.tools/work/apk/work/framework-res/res/xml

@@ -229,4 +229,4 @@ cd "$PD"
 umount "$PD"/work/"$ROM"/s "$PD"/work/"$ROM"/p
 rm -rf "$PD"/work/"$ROM"/s "$PD"/work/"$ROM"/p
 
-./zip "$ROM"
+./zip.sh "$ROM"

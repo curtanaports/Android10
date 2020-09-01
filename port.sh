@@ -3,6 +3,9 @@ PD="$PWD"
 
 DATE=$(TZ=Asia/Kolkata date +"%d%m")
 
+ROM="$1"
+##---------------------------------------------------------##
+
 sudo mkdir "$PD"/out
 sudo mkdir "$PD"/out/"$ROM"
 sudo mkdir "$PD"/in
@@ -11,8 +14,7 @@ sudo mkdir "$PD"/work
 sudo mkdir "$PD"/work/"$ROM"
 mv *.zip "$PD"/in/"$ROM"/
 
-unzip -n -q -d "$PD"/out/"$ROM" "$PD"/in/"$ROM"/*.zip -x firmware-update/abl.elf firmware-update/BTFM.bin firmware-update/cmnlib64.mbn firmware-update/cmnlib.mbn firmware-update/devcfg.mbn firmware-update/dspso.bin firmware-update/hyp.mbn firmware-update/keymaster.mbn firmware-update/mdtp.img firmware-update/mdtpsecapp.mbn firmware-update/NON-HLOS.bin firmware-update/pmic.elf firmware-update/rpm.mbn firmware-update/splash.img firmware-update/tz.mbn firmware-update/xbl.elf boot.img dtbo.img vendor.* cust.*
-rm -rf "$PD"/out/$ROM/firmware-update
+unzip -n -q -d "$PD"/out/"$ROM" "$PD"/in/"$ROM"/*.zip -x firmware-update/km4.mbn firmware-update/qupv3fw.elf firmware-update/storsec.mbn firmware-update/uefi_sec.mbn firmware-update/vbmeta.img firmware-update/xbl_config.elf firmware-update/imagefv.elf firmware-update/dtbo.img firmware-update/abl.elf firmware-update/BTFM.bin firmware-update/cmnlib64.mbn firmware-update/cmnlib.mbn firmware-update/devcfg.mbn firmware-update/dspso.bin firmware-update/hyp.mbn firmware-update/keymaster.mbn firmware-update/mdtp.img firmware-update/mdtpsecapp.mbn firmware-update/NON-HLOS.bin firmware-update/pmic.elf firmware-update/rpm.mbn firmware-update/splash.img firmware-update/tz.mbn firmware-update/xbl.elf boot.img dtbo.img vendor.* cust.*
 
 brotli -j -v -d "$PD"/out/$ROM/system.new.dat.br "$PD"/out/$ROM/system.new.dat
 .tools/sdat2img/sdat2img.py "$PD"/out/$ROM/system.transfer.list "$PD"/out/$ROM/system.new.dat "$PD"/work/"$ROM"/s-"$DATE".img

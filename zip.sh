@@ -6,36 +6,28 @@ DATE=$(TZ=Asia/Kolkata date +"%d%m")
 ROM="$1"
 ##---------------------------------------------------------##
 
-mkdir "$PD"/out/"$ROM"
-cd "$PD"/work/"$ROM"/
-sudo umount s p v
-rm -rf s p v
-
 # resize
-e2fsck -f -y s-"$DATE".img
-resize2fs -M s-"$DATE".img
+e2fsck -f -y "$PD"/work/"$ROM"/s-"$DATE".img
+resize2fs -M "$PD"/work/"$ROM"/s-"$DATE".img
 
-e2fsck -f -y p-"$DATE".img
-resize2fs -M p-"$DATE".img
+e2fsck -f -y "$PD"/work/"$ROM"/p-"$DATE".img
+resize2fs -M "$PD"/work/"$ROM"/p-"$DATE".img
 
 ##---------------------------------------------------------##
 
-#"$PD"/.tools/img2simg s-"$DATE".img s
-#rm s-"$DATE".img
-"$PD"/.tools/img2sdat/img2sdat.py "$PD"/work/"$ROM"/s-"$DATE".img -o "$PD"/out/"$ROM"/ -v 4
-#rm s
+"$PD"/.tools/img2simg "$PD"/work/"$ROM"/s-"$DATE".img "$PD"/work/"$ROM"/s
+rm "$PD"/work/"$ROM"/s-"$DATE".img
+"$PD"/.tools/img2sdat/img2sdat.py "$PD"/work/"$ROM"/s -o "$PD"/out/"$ROM"/ -v 4
+rm "$PD"/work/"$ROM"/s
 brotli -6jf "$PD"/out/"$ROM"/system.new.dat
-#rm "$PD"/out/"$ROM"/system.new.dat
 
-"$PD"/.tools/img2sdat/img2sdat.py "$PD"/work/"$ROM"/s-"$DATE".img -p product -o "$PD"/out/"$ROM"/ -v 4
-#rm s
+"$PD"/.tools/img2simg "$PD"/work/"$ROM"/p-"$DATE".img "$PD"/work/"$ROM"/p
+rm "$PD"/work/"$ROM"/p-"$DATE".img
+"$PD"/.tools/img2sdat/img2sdat.py "$PD"/work/"$ROM"/p -p product -o "$PD"/out/"$ROM"/ -v 4
+rm "$PD"/work/"$ROM"/p
 brotli -6jf "$PD"/out/"$ROM"/product.new.dat
-#rm "$PD"/out/"$ROM"/product.new.dat
 
 cd "$PD"/out/"$ROM"
-#mv "$PD"/work/"$ROM"/*.br "$PD"/out/"$ROM"
-#mv "$PD"/work/"$ROM"/*patch.dat "$PD"/out/"$ROM"
-#mv "$PD"/work/"$ROM"/*transfer.list "$PD"/out/"$ROM"
 mv "$PD"/.tools/common/dynamic_partitions_op_list "$PD"/out/"$ROM"
 mv "$PD"/.tools/common/META-INF "$PD"/out/"$ROM"/
 

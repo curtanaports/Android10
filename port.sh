@@ -135,12 +135,12 @@ sudo rm -rf "$PD"/.tools/work/apk/work/framework-res
 
 # haptic ===========================================================
 
-sudo cp -v "$PD"/work/"$ROM"/s/system/priv-app/MiuiSystemUI/MiuiSystemUI.apk "$PD"/.tools/work//apk/in/
-sudo unzip -X "$PD"/.tools/work//apk/in/MiuiSystemUI.apk -d "$PD"/.tools/work//apk/work/MiuiSystemUI
-java -jar "$PD"/.tools/work//apk/bak.jar d "$PD"/.tools/work//apk/work/MiuiSystemUI/classes.dex -o "$PD"/.tools/work//apk/work/bak
+sudo cp -v "$PD"/work/"$ROM"/s/system/priv-app/MiuiSystemUI/MiuiSystemUI.apk "$PD"/.tools/work/apk/in/
+sudo unzip -X "$PD"/.tools/work/apk/in/MiuiSystemUI.apk -d "$PD"/.tools/work/apk/work/MiuiSystemUI
+java -jar "$PD"/.tools/work/apk/bak.jar d "$PD"/.tools/work/apk/work/MiuiSystemUI/classes.dex -o "$PD"/.tools/work/apk/work/bak
 
-charge="$PD"/.tools/work//apk/work/bak/com/android/keyguard/charge/rapid/RapidChargeView.smali
-sshot="$PD"/.tools/work//apk/work/bak/com/android/systemui/screenshot/GlobalScreenshot.smali
+charge="$PD"/.tools/work/apk/work/bak/com/android/keyguard/charge/rapid/RapidChargeView.smali
+sshot="$PD"/.tools/work/apk/work/bak/com/android/systemui/screenshot/GlobalScreenshot.smali
 
 sudo sed -i 's|    const-class p2, Lcom/android/systemui/HapticFeedBackImpl;||g' "$charge"
 sudo sed -i 's|    invoke-static {p2}, Lcom/android/systemui/Dependency;->get(Ljava/lang/Class;)Ljava/lang/Object;||g' "$charge"
@@ -154,10 +154,10 @@ sed '
     /^\n$/d;
     P;
     D
-' $charge > "$PD"/.tools/work//apk/work/bak/com/android/keyguard/charge/rapid/temp
+' $charge > "$PD"/.tools/work/apk/work/bak/com/android/keyguard/charge/rapid/temp
 
-sudo cp "$PD"/.tools/work//apk/work/bak/com/android/keyguard/charge/rapid/temp "$PD"/.tools/work//apk/work/bak/com/android/keyguard/charge/rapid/RapidChargeView.smali
-sudo rm "$PD"/.tools/work//apk/work/bak/com/android/keyguard/charge/rapid/temp
+sudo cp "$PD"/.tools/work/apk/work/bak/com/android/keyguard/charge/rapid/temp "$PD"/.tools/work/apk/work/bak/com/android/keyguard/charge/rapid/RapidChargeView.smali
+sudo rm "$PD"/.tools/work/apk/work/bak/com/android/keyguard/charge/rapid/temp
 
 
 sudo sed -i 's|    new-instance v1, Lmiui/util/HapticFeedbackUtil;||g' "$sshot"
@@ -170,20 +170,20 @@ sed '
     /^\n$/d;
     P;
     D
-' $sshot > "$PD"/.tools/work//apk/work/bak/com/android/systemui/screenshot/temp
-sudo cp "$PD"/.tools/work//apk/work/bak/com/android/systemui/screenshot/temp "$PD"/.tools/work//apk/work/bak/com/android/systemui/screenshot/GlobalScreenshot.smali
-sudo rm "$PD"/.tools/work//apk/work/bak/com/android/systemui/screenshot/temp
+' $sshot > "$PD"/.tools/work/apk/work/bak/com/android/systemui/screenshot/temp
+sudo cp "$PD"/.tools/work/apk/work/bak/com/android/systemui/screenshot/temp "$PD"/.tools/work/apk/work/bak/com/android/systemui/screenshot/GlobalScreenshot.smali
+sudo rm "$PD"/.tools/work/apk/work/bak/com/android/systemui/screenshot/temp
 
-cd "$PD"/.tools/work//apk/work/
-java -jar "$PD"/.tools/work//apk/smali.jar a "$PD"/.tools/work//apk/work/bak -o "$PD"/.tools/work//apk/work/classes.dex
-sudo mv "$PD"/.tools/work//apk/work/classes.dex "$PD"/.tools/work//apk/work/MiuiSystemUI/
-cd "$PD"/.tools/work//apk/work/MiuiSystemUI
+cd "$PD"/.tools/work/apk/work/
+java -jar "$PD"/.tools/work/apk/smali.jar a "$PD"/.tools/work/apk/work/bak -o "$PD"/.tools/work/apk/work/classes.dex
+sudo mv "$PD"/.tools/work/apk/work/classes.dex "$PD"/.tools/work/apk/work/MiuiSystemUI/
+cd "$PD"/.tools/work/apk/work/MiuiSystemUI
 sudo zip -r0 MiuiSystemUI.apk *
 cd "$PD"
-sudo cp -v "$PD"/.tools/work//apk/work/MiuiSystemUI/MiuiSystemUI.apk "$PD"/work/"$ROM"/s/system/priv-app/MiuiSystemUI/MiuiSystemUI.apk
+sudo cp -v "$PD"/.tools/work/apk/work/MiuiSystemUI/MiuiSystemUI.apk "$PD"/work/"$ROM"/s/system/priv-app/MiuiSystemUI/MiuiSystemUI.apk
 sudo chmod 0644 "$PD"/work/"$ROM"/s/system/priv-app/MiuiSystemUI/MiuiSystemUI.apk
-sudo rm -rf "$PD"/.tools/work//apk/work/MiuiSystemUI
-sudo rm -rf "$PD"/.tools/work//apk/work/bak
+sudo rm -rf "$PD"/.tools/work/apk/work/MiuiSystemUI
+sudo rm -rf "$PD"/.tools/work/apk/work/bak
 
 
 # product ===========================================================

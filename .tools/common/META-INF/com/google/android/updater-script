@@ -8,12 +8,8 @@ ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");ui_print(" ");
 ui_print("Miui Port Rom");
 ui_print("MIUI 12.x");
 ui_print(" ");
-ui_print("Ported to curtana by Sudeep Duhoon");
+ui_print("Ported by Sudeep Duhoon");
 ui_print(" ");
-
-getprop("ro.product.device") == "curtana" || abort("E3004: This package is for \"curtana\" devices; this is a \"" + getprop("ro.product.device") + "\".");
-ui_print("Target: Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.10.0.QJWMIXM:user/release-keys");
-show_progress(0.200000, 10);
 
 assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));
 
